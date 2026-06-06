@@ -89,9 +89,14 @@ foreach ($key in $cleanupKeys) {
     }
 }
 
-Start-Process cleanmgr -ArgumentList "/sagerun:1" -Wait
-
-Write-Host "  [OK] Disk Cleanup done." -ForegroundColor Green
+$job = Start-Process cleanmgr -ArgumentList "/sagerun:1" -PassThru
+$finished = $job.WaitForExit(60000)
+if (-not $finished) {
+    $job.Kill()
+    Write-Host "  [SKIP] Disk Cleanup timed out (60s), skipped." -ForegroundColor DarkGray
+} else {
+    Write-Host "  [OK] Disk Cleanup done." -ForegroundColor Green
+}
 
 # -----------------------------------------------
 # Section 5 — Browser Cache
