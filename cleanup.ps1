@@ -56,11 +56,11 @@ Write-Host "  [OK] Explorer Cache cleaned." -ForegroundColor Green
 # Bagian 3 — DISM Component Cleanup
 # -----------------------------------------------
 Write-Host "[3/6] Running DISM Cleanup..." -ForegroundColor Yellow
-Write-Host "  (Ini bisa makan waktu beberapa menit, sabar ya bro...)" -ForegroundColor DarkGray
+Write-Host "  (This may take a few minutes, please be patient...)" -ForegroundColor DarkGray
 
 Dism /Online /Cleanup-Image /StartComponentCleanup /Quiet /NoRestart
 
-Write-Host "  [OK] DISM Cleanup selesai." -ForegroundColor Green
+Write-Host "  [OK] DISM Cleanup cleaned." -ForegroundColor Green
 
 # -----------------------------------------------
 # Bagian 4 — Disk Cleanup (cleanmgr)
@@ -93,7 +93,7 @@ foreach ($key in $cleanupKeys) {
 
 Start-Process cleanmgr -ArgumentList "/sagerun:1" -Wait
 
-Write-Host "  [OK] Disk Cleanup selesai." -ForegroundColor Green
+Write-Host "  [OK] Disk Cleanup cleaned." -ForegroundColor Green
 
 # -----------------------------------------------
 # Bagian 5 — Browser Cache
@@ -128,23 +128,23 @@ Write-Host "[6/6] Checking Windows.old..." -ForegroundColor Yellow
 
 if (Test-Path "C:\Windows.old") {
     Write-Host ""
-    Write-Host "  Folder Windows.old ditemukan, lumayan gede tuh!" -ForegroundColor Magenta
-    $pilihan = Read-Host "  Hapus Windows.old? (Y/N)"
+    Write-Host "  Windows.old folder found, it's quite big!" -ForegroundColor Magenta
+    $pilihan = Read-Host "  remove Windows.old? (Y/N)"
 
     if ($pilihan -eq 'Y' -or $pilihan -eq 'y') {
-        Write-Host "  Menghapus Windows.old..." -ForegroundColor Yellow
+        Write-Host "  Deleting Windows.old..." -ForegroundColor Yellow
         Remove-Item -Path "C:\Windows.old" -Recurse -Force
-        Write-Host "  [OK] Windows.old berhasil dihapus." -ForegroundColor Green
+        Write-Host "  [OK] Windows.old successfully deleted." -ForegroundColor Green
     } else {
-        Write-Host "  [SKIP] Windows.old dilewati." -ForegroundColor DarkGray
+        Write-Host "  [SKIP] Windows.old skipped." -ForegroundColor DarkGray
     }
 } else {
-    Write-Host "  [SKIP] Windows.old tidak ditemukan." -ForegroundColor DarkGray
+    Write-Host "  [SKIP] Windows.old not found." -ForegroundColor DarkGray
 }
 
 # ============================================
 Write-Host ""
 Write-Host "============================================" -ForegroundColor Cyan
-Write-Host "        Selesai Sukses Bro!                 " -ForegroundColor Green
+Write-Host "        Successfully Done!                 " -ForegroundColor Green
 Write-Host "============================================" -ForegroundColor Cyan
 Write-Host ""
