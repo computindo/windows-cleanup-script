@@ -15,7 +15,7 @@ Write-Host ""
 # -----------------------------------------------
 # Section 1 — Temp Files
 # -----------------------------------------------
-Write-Host "[1/11] Cleaning Temp Files..." -ForegroundColor Yellow
+Write-Host "[1/10] Cleaning Temp Files..." -ForegroundColor Yellow
 
 $tempPaths = @(
     $env:TEMP,
@@ -34,7 +34,7 @@ Write-Host "  [OK] Temp Files cleaned." -ForegroundColor Green
 # -----------------------------------------------
 # Section 2 — Explorer Cache
 # -----------------------------------------------
-Write-Host "[2/11] Cleaning Explorer Cache..." -ForegroundColor Yellow
+Write-Host "[2/10] Cleaning Explorer Cache..." -ForegroundColor Yellow
 
 $explorerCachePaths = @(
     "$env:LocalAppData\Microsoft\Windows\Explorer\thumbcache_*.db",
@@ -52,56 +52,27 @@ ipconfig /flushdns | Out-Null
 Write-Host "  [OK] Explorer Cache cleaned." -ForegroundColor Green
 
 # -----------------------------------------------
-# Section 3 — DISM Component Cleanup
+# Section 3 — DISM Component Cleanup (timeout: 60s)
 # -----------------------------------------------
-Write-Host "[3/11] Running DISM Cleanup..." -ForegroundColor Yellow
+Write-Host "[3/10] Running DISM Cleanup..." -ForegroundColor Yellow
 Write-Host "  (This may take a few minutes, please be patient...)" -ForegroundColor DarkGray
 
-Dism /Online /Cleanup-Image /StartComponentCleanup /Quiet /NoRestart
+$dismJob = Start-Process -FilePath "Dism.exe" `
+    -ArgumentList "/Online /Cleanup-Image /StartComponentCleanup /Quiet /NoRestart" `
+    -PassThru
 
-Write-Host "  [OK] DISM Cleanup done." -ForegroundColor Green
-
-# -----------------------------------------------
-# Section 4 — Disk Cleanup (cleanmgr)
-# -----------------------------------------------
-Write-Host "[4/11] Running Disk Cleanup..." -ForegroundColor Yellow
-
-$regPath = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VolumeCaches"
-$cleanupKeys = @(
-    "Active Setup Temp Folders", "BranchCache", "Downloaded Program Files",
-    "GameNewsFiles", "GameStatisticsFiles", "GameUpdateFiles",
-    "Internet Cache Files", "Memory Dump Files", "Offline Pages Files",
-    "Old ChkDsk Files", "Previous Installations", "Recycle Bin",
-    "Service Pack Cleanup", "Setup Log Files", "System error memory dump files",
-    "System error minidump files", "Temporary Files", "Temporary Setup Files",
-    "Temporary Sync Files", "Thumbnail Cache", "Update Cleanup",
-    "Upgrade Discarded Files", "User file versions", "Windows Defender",
-    "Windows Error Reporting Archive Files", "Windows Error Reporting Queue Files",
-    "Windows Error Reporting System Archive Files",
-    "Windows Error Reporting System Queue Files", "Windows ESD installation files",
-    "Windows Upgrade Log Files"
-)
-
-foreach ($key in $cleanupKeys) {
-    $fullPath = "$regPath\$key"
-    if (Test-Path $fullPath) {
-        Set-ItemProperty -Path $fullPath -Name "StateFlags0001" -Value 2 -Type DWord
-    }
-}
-
-$job = Start-Process cleanmgr -ArgumentList "/sagerun:1" -PassThru
-$finished = $job.WaitForExit(60000)
-if (-not $finished) {
-    $job.Kill()
-    Write-Host "  [SKIP] Disk Cleanup timed out (60s), skipped." -ForegroundColor DarkGray
+$dismFinished = $dismJob.WaitForExit(60000)
+if (-not $dismFinished) {
+    $dismJob.Kill()
+    Write-Host "  [SKIP] DISM timed out (60s), skipped." -ForegroundColor DarkGray
 } else {
-    Write-Host "  [OK] Disk Cleanup done." -ForegroundColor Green
+    Write-Host "  [OK] DISM Cleanup done." -ForegroundColor Green
 }
 
 # -----------------------------------------------
-# Section 5 — Browser Cache
+# Section 4 — Browser Cache
 # -----------------------------------------------
-Write-Host "[5/11] Cleaning Browser Cache..." -ForegroundColor Yellow
+Write-Host "[4/10] Cleaning Browser Cache..." -ForegroundColor Yellow
 
 $browserCachePaths = @(
     "$env:LocalAppData\Google\Chrome\User Data\Default\Cache\*",
@@ -124,9 +95,9 @@ if (Test-Path $firefoxProfilesPath) {
 Write-Host "  [OK] Browser Cache cleaned." -ForegroundColor Green
 
 # -----------------------------------------------
-# Section 6 — [TIER A] Windows Update Cache
+# Section 5 — Windows Update Cache
 # -----------------------------------------------
-Write-Host "[6/11] Cleaning Windows Update Cache..." -ForegroundColor Yellow
+Write-Host "[5/10] Cleaning Windows Update Cache..." -ForegroundColor Yellow
 
 Stop-Service -Name wuauserv -Force
 
@@ -144,9 +115,9 @@ Start-Service -Name wuauserv
 Write-Host "  [OK] Windows Update Cache cleaned." -ForegroundColor Green
 
 # -----------------------------------------------
-# Section 7 — [TIER A] Event Logs
+# Section 6 — Event Logs
 # -----------------------------------------------
-Write-Host "[7/11] Clearing Event Logs..." -ForegroundColor Yellow
+Write-Host "[6/10] Clearing Event Logs..." -ForegroundColor Yellow
 
 $logs = @("Application", "System", "Security", "Setup")
 foreach ($log in $logs) {
@@ -156,9 +127,9 @@ foreach ($log in $logs) {
 Write-Host "  [OK] Event Logs cleared." -ForegroundColor Green
 
 # -----------------------------------------------
-# Section 8 — [TIER A] Windows Error Reporting
+# Section 7 — Windows Error Reporting
 # -----------------------------------------------
-Write-Host "[8/11] Cleaning Windows Error Reporting..." -ForegroundColor Yellow
+Write-Host "[7/10] Cleaning Windows Error Reporting..." -ForegroundColor Yellow
 
 $werPaths = @(
     "C:\ProgramData\Microsoft\Windows\WER\ReportArchive\*",
@@ -174,9 +145,9 @@ foreach ($path in $werPaths) {
 Write-Host "  [OK] Windows Error Reporting cleaned." -ForegroundColor Green
 
 # -----------------------------------------------
-# Section 9 — [TIER B] App Cache (Teams, Spotify, Discord)
+# Section 8 — App Cache (Teams, Spotify, Discord)
 # -----------------------------------------------
-Write-Host "[9/11] Cleaning App Cache..." -ForegroundColor Yellow
+Write-Host "[8/10] Cleaning App Cache..." -ForegroundColor Yellow
 
 $appCachePaths = @(
     "$env:AppData\Microsoft\Teams\Cache\*",
@@ -199,9 +170,9 @@ foreach ($path in $appCachePaths) {
 Write-Host "  [OK] App Cache cleaned." -ForegroundColor Green
 
 # -----------------------------------------------
-# Section 10 — [TIER C] Recycle Bin (with confirmation)
+# Section 9 — Recycle Bin (with confirmation)
 # -----------------------------------------------
-Write-Host "[10/11] Checking Recycle Bin..." -ForegroundColor Yellow
+Write-Host "[9/10] Checking Recycle Bin..." -ForegroundColor Yellow
 Write-Host ""
 
 $shell = New-Object -ComObject Shell.Application
@@ -222,9 +193,9 @@ if ($itemCount -gt 0) {
 }
 
 # -----------------------------------------------
-# Section 11 — [TIER C] Windows.old (with confirmation)
+# Section 10 — Windows.old (with confirmation)
 # -----------------------------------------------
-Write-Host "[11/11] Checking Windows.old..." -ForegroundColor Yellow
+Write-Host "[10/10] Checking Windows.old..." -ForegroundColor Yellow
 
 if (Test-Path "C:\Windows.old") {
     Write-Host ""
