@@ -28,9 +28,15 @@ if ($osVersion.Major -lt 10) {
 
 function Write-Header {
     Clear-Host
-    Write-Host "============================================" -ForegroundColor Cyan
-    Write-Host "     Windows Storage Cleanup v3.3           " -ForegroundColor Cyan
-    Write-Host "============================================" -ForegroundColor Cyan
+    Write-Host ""
+    Write-Host "  ██╗    ██╗██╗███╗   ██╗ ██████╗██╗     ███████╗ █████╗ ███╗   ██╗" -ForegroundColor Cyan
+    Write-Host "  ██║    ██║██║████╗  ██║██╔════╝██║     ██╔════╝██╔══██╗████╗  ██║" -ForegroundColor Cyan
+    Write-Host "  ██║ █╗ ██║██║██╔██╗ ██║██║     ██║     █████╗  ███████║██╔██╗ ██║" -ForegroundColor Cyan
+    Write-Host "  ██║███╗██║██║██║≕██╗██║██║     ██║     ██╔══╝  ██╔══██║██║╚██╗██║" -ForegroundColor Cyan
+    Write-Host "  ╚███╔███╔╝██║██║ ╚████║╚██████╗███████╗███████╗██║  ██║██║ ╚████║" -ForegroundColor Cyan
+    Write-Host "   ╚══╝╚══╝ ╚═╝╚═╝  ╚═══╝ ╚═════╝╚══════╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═══╝" -ForegroundColor Cyan
+    Write-Host ""
+    Write-Host "  Windows Storage Cleanup v3.3                    by computindo" -ForegroundColor DarkGray
     Write-Host ""
 }
 
