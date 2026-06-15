@@ -34,7 +34,7 @@ function Write-Header {
     Write-Host "   \ \/ /  | || .` | (__| |__| _| / _ \| .` |" -ForegroundColor Cyan
     Write-Host "    \__/  |___|_|\_|\___|____|___/_/ \_\_|\_|" -ForegroundColor Cyan
     Write-Host ""
-    Write-Host "  Windows Storage Cleanup v3.3                    by computindo" -ForegroundColor DarkGray
+    Write-Host "  Windows Storage Cleanup v3.3                    by Naufalt - computindo" -ForegroundColor DarkGray
     Write-Host "  -----------------------------------------------" -ForegroundColor DarkGray
     Write-Host ""
 }
