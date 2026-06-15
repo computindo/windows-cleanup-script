@@ -29,14 +29,13 @@ if ($osVersion.Major -lt 10) {
 function Write-Header {
     Clear-Host
     Write-Host ""
-    Write-Host "  ██╗    ██╗██╗███╗   ██╗ ██████╗██╗     ███████╗ █████╗ ███╗   ██╗" -ForegroundColor Cyan
-    Write-Host "  ██║    ██║██║████╗  ██║██╔════╝██║     ██╔════╝██╔══██╗████╗  ██║" -ForegroundColor Cyan
-    Write-Host "  ██║ █╗ ██║██║██╔██╗ ██║██║     ██║     █████╗  ███████║██╔██╗ ██║" -ForegroundColor Cyan
-    Write-Host "  ██║███╗██║██║██║≕██╗██║██║     ██║     ██╔══╝  ██╔══██║██║╚██╗██║" -ForegroundColor Cyan
-    Write-Host "  ╚███╔███╔╝██║██║ ╚████║╚██████╗███████╗███████╗██║  ██║██║ ╚████║" -ForegroundColor Cyan
-    Write-Host "   ╚══╝╚══╝ ╚═╝╚═╝  ╚═══╝ ╚═════╝╚══════╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═══╝" -ForegroundColor Cyan
+    Write-Host "  __    __ ___ _  _  ___ _    ___   _   _  _ " -ForegroundColor Cyan
+    Write-Host "  \ \  / /|_ _| \| |/ __| |  | __| /_\ | \| |" -ForegroundColor Cyan
+    Write-Host "   \ \/ /  | || .` | (__| |__| _| / _ \| .` |" -ForegroundColor Cyan
+    Write-Host "    \__/  |___|_|\_|\___|____|___/_/ \_\_|\_|" -ForegroundColor Cyan
     Write-Host ""
     Write-Host "  Windows Storage Cleanup v3.3                    by computindo" -ForegroundColor DarkGray
+    Write-Host "  -----------------------------------------------" -ForegroundColor DarkGray
     Write-Host ""
 }
 
